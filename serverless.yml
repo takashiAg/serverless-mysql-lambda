@@ -1,0 +1,66 @@
+custom:
+  default_stage: dev
+  region: ap-northeast-1
+  stage: ${opt:stage, self:custom.default_stage}
+  db_id: serverless-mysql-lambda-typeorm-example
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: ${self:custom.region}
+
+service: serverless-mysql-lambda-typeorm-example
+
+resources:
+  Resources:
+    SecretAurora:
+      Type: AWS::SecretsManager::Secret
+      Properties:
+        GenerateSecretString:
+          SecretStringTemplate: '{"username": "admin"}'
+          GenerateStringKey: "password"
+          PasswordLength: 16
+          ExcludeCharacters: '"@/\'
+    Aurora:
+      Type: AWS::RDS::DBCluster
+      Properties:
+        DBClusterParameterGroupName: !Ref DBClusterParameterGroup
+        DBClusterIdentifier: ${self:custom.db_id}
+        MasterUsername:
+          !Join [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              !Ref SecretAurora,
+              ":SecretString:username}}",
+            ],
+          ]
+        MasterUserPassword:
+          !Join [
+            "",
+            [
+              "{{resolve:secretsmanager:",
+              !Ref SecretAurora,
+              ":SecretString:password}}",
+            ],
+          ]
+        Engine: aurora
+        EngineMode: serverless
+        ScalingConfiguration:
+          AutoPause: true
+          MaxCapacity: 8
+          MinCapacity: 1
+          SecondsUntilAutoPause: 3600
+    DBClusterParameterGroup:
+      Type: AWS::RDS::DBClusterParameterGroup
+      Properties:
+        Description: A parameter group for develpment database
+        Family: aurora5.6
+        Parameters:
+          character_set_client: utf8mb4
+          character_set_connection: utf8mb4
+          character_set_database: utf8mb4
+          character_set_results: utf8mb4
+          character_set_server: utf8mb4
+          time_zone: Asia/Tokyo
