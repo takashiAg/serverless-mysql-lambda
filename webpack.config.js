@@ -1,5 +1,6 @@
 const nodeExternals = require("webpack-node-externals");
 const serverlessWebpack = require("serverless-webpack");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   devtool: "inline-cheap-module-source-map",
@@ -23,4 +24,5 @@ module.exports = {
     extensions: [".ts", ".js"],
   },
   target: "node",
+  plugins: [new CopyWebpackPlugin({ patterns: ["ormconfig.js"] })],
 };

@@ -1,8 +1,11 @@
 import { Request, Response, Router, NextFunction } from "express";
-const router = Router();
+import { useUserRouter } from "./UserRouter";
 
-router.get("/", function (req: Request, res: Response, next: NextFunction) {
-  res.json({ message: "welcome to the api" });
-});
-
-export default router;
+export const useRouter = () => {
+  const router = Router();
+  router.get("/", function (req: Request, res: Response, next: NextFunction) {
+    res.json({ message: "welcome to the api" });
+  });
+  router.use("/user", useUserRouter());
+  return router;
+};
