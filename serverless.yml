@@ -1,16 +1,34 @@
-custom:
-  default_stage: dev
-  region: ap-northeast-1
-  stage: ${opt:stage, self:custom.default_stage}
-  db_id: serverless-mysql-lambda-typeorm-example
-
+service: serverless-mysql-typeorm
 provider:
   name: aws
   runtime: nodejs14.x
   stage: dev
   region: ${self:custom.region}
+  httpApi:
+    cors:
+      allowedOrigins:
+        - https://*
+        - http://*
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+      allowedMethods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+      allowCredentials: true
+      exposedResponseHeaders:
+        - Special-Response-Header
+      maxAge: 6000 # In seconds
 
-service: serverless-mysql-lambda-typeorm-example
+custom:
+  webpack:
+    includeModules: true
+  default_stage: dev
+  region: ap-northeast-1
+  stage: ${opt:stage, self:custom.default_stage}
+  db_id: serverless-mysql-lambda-typeorm-example
 
 resources:
   Resources:
@@ -27,6 +45,7 @@ resources:
       Properties:
         DBClusterParameterGroupName: !Ref DBClusterParameterGroup
         DBClusterIdentifier: ${self:custom.db_id}
+        EnableHttpEndpoint: true
         MasterUsername:
           !Join [
             "",
@@ -55,7 +74,7 @@ resources:
     DBClusterParameterGroup:
       Type: AWS::RDS::DBClusterParameterGroup
       Properties:
-        Description: A parameter group for develpment database
+        Description: develpment database
         Family: aurora5.6
         Parameters:
           character_set_client: utf8mb4
@@ -78,4 +97,5 @@ functions:
 
 plugins:
   - serverless-offline
+  - serverless-webpack
   - serverless-esbuild
