@@ -64,3 +64,18 @@ resources:
           character_set_results: utf8mb4
           character_set_server: utf8mb4
           time_zone: Asia/Tokyo
+
+functions:
+  rest:
+    handler: src/index.handler
+    events:
+      - http:
+          path: /api
+          method: ANY
+      - http:
+          path: /api/{proxy+}
+          method: ANY
+
+plugins:
+  - serverless-offline
+  - serverless-esbuild
