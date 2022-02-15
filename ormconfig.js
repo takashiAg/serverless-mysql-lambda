@@ -15,18 +15,10 @@ const local = {
   username: MYSQL_USERNAME,
   password: MYSQL_PASSWORD,
   database: MYSQL_DATABASE,
-  synchronize: true,
+  synchronize: false,
   logging: false,
   connectTimeout: 5 * 1000,
   acquireTimeout: 5 * 1000,
-  entities: [__dirname + "/dist/entity/**/*.js"],
-  migrations: [__dirname + "/dist/migration/**/*.js"],
-  // subscribers: [__dirname + '/dist/subscriber/**/*.js'],
-  cli: {
-    entitiesDir: "src/entity",
-    migrationsDir: "src/migration",
-    // subscribersDir: 'src/subscriber'
-  },
 };
 const aws = {
   type: "aurora-data-api",
@@ -34,16 +26,21 @@ const aws = {
   resourceArn: DB_CLST_ARN,
   secretArn: SECRET_ARN,
   database: SCHEMA,
-  entities: [__dirname + "/src/entities/**/*.ts"],
-  migrations: [__dirname + "/src/migrations/**/*.ts"],
-  subscribers: [__dirname + "/src/subscribers/**/*.ts"],
-  cli: {
-    entitiesDir: "src/entities/",
-    migrationsDir: "src/migrations/",
-    subscribersDir: "src/subscribers/",
-  },
 };
 
-const conifg = [{ ...(LOCAL ? local : aws), name: "default" }];
+const conifg = [
+  {
+    ...(LOCAL ? local : aws),
+    name: "default",
+    entities: ["src/entity/**/*.ts"],
+    migrations: ["src/migration/**/*.ts"],
+    subscribers: ["src/subscriber/**/*.ts"],
+    cli: {
+      entitiesDir: "src/entity",
+      migrationsDir: "src/migration",
+      subscribersDir: "src/subscriber",
+    },
+  },
+];
 
 module.exports = conifg;

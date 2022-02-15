@@ -6,6 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "serverless offline",
+    "migrate:generate": "ts-node node_modules/.bin/typeorm migration:generate -n Migration",
+    "migrate:run": "ts-node node_modules/.bin/typeorm migration:run",
     "deploy": "serverless deploy"
   },
   "author": "",

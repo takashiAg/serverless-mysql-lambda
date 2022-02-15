@@ -30,7 +30,7 @@ export const handler = async (
 
     const handlers = serverless(app);
     const result = await handlers(event, context);
-    return { body: result.body };
+    return result;
   } catch (e) {
     console.error("error", e);
     return {

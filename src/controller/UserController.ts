@@ -11,6 +11,7 @@ export class UserController {
       response.json(result);
     } catch (e) {
       console.error(e);
+      response.status(500).json({ message: e?.message || "unknown error" });
     }
   }
 
@@ -21,6 +22,7 @@ export class UserController {
       response.json(result);
     } catch (e) {
       console.error(e);
+      response.status(500).json({ message: e?.message || "unknown error" });
     }
   }
 
@@ -32,6 +34,7 @@ export class UserController {
       response.json(result);
     } catch (e) {
       console.error(e);
+      response.status(500).json({ message: e?.message || "unknown error" });
     }
   }
 
