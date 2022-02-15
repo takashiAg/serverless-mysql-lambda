@@ -21,6 +21,30 @@ provider:
       exposedResponseHeaders:
         - Special-Response-Header
       maxAge: 6000 # In seconds
+  environment:
+    DB_CLST_ARN: ${self:custom.db_cluster_arn}
+    SECRET_ARN: !Ref SecretAurora
+    TEST: !Ref AWS::AccountId
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - "dbqms:CreateFavoriteQuery"
+            - "dbqms:DescribeFavoriteQueries"
+            - "dbqms:UpdateFavoriteQuery"
+            - "dbqms:DeleteFavoriteQueries"
+            - "dbqms:GetQueryString"
+            - "dbqms:CreateQueryHistory"
+            - "dbqms:DescribeQueryHistory"
+            - "dbqms:UpdateQueryHistory"
+            - "dbqms:DeleteQueryHistory"
+            - "dbqms:DescribeQueryHistory"
+            - "rds-data:ExecuteSql"
+            - "rds-data:ExecuteStatement"
+            - "secretsmanager:*"
+            - "tag:GetResources"
+          Resource: "*"
 
 custom:
   webpack:
@@ -39,27 +63,6 @@ custom:
       - !Ref AWS::AccountId
       - ":cluster:"
       - !Ref Aurora
-  environment:
-    DB_CLST_ARN: ${self:custom.db_cluster_arn}
-    SECRET_ARN: !Ref SecretAurora
-    TEST: !Ref AWS::AccountId
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - "dbqms:CreateFavoriteQuery"
-        - "dbqms:DescribeFavoriteQueries"
-        - "dbqms:UpdateFavoriteQuery"
-        - "dbqms:DeleteFavoriteQueries"
-        - "dbqms:GetQueryString"
-        - "dbqms:CreateQueryHistory"
-        - "dbqms:DescribeQueryHistory"
-        - "dbqms:UpdateQueryHistory"
-        - "dbqms:DeleteQueryHistory"
-        - "dbqms:DescribeQueryHistory"
-        - "rds-data:ExecuteSql"
-        - "secretsmanager:*"
-        - "tag:GetResources"
-      Resource: "*"
 
 resources:
   Resources:
@@ -125,10 +128,6 @@ functions:
       - http:
           path: /api/{proxy+}
           method: ANY
-    environment:
-      DB_CLST_ARN: ${self:custom.db_cluster_arn}
-      SECRET_ARN: !Ref SecretAurora
-      TEST: !Ref AWS::AccountId
   up:
     handler: src/handlers/index.up
     timeout: 30
