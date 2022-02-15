@@ -5,21 +5,17 @@ import {
   APIGatewayProxyEventV2,
   Context,
 } from "aws-lambda";
-import { BaseEntity, createConnection, getConnectionOptions } from "typeorm";
+import { BaseEntity } from "typeorm";
 import cors from "cors";
 import { useRouter } from "./routers";
-import { User as UserEntity } from "./entity/User";
+import { getConnection } from "@libs/getConnection";
 
 export const handler = async (
   event: APIGatewayProxyEvent | APIGatewayProxyEventV2,
   context: Context
 ) => {
   try {
-    const connectionOptions = await getConnectionOptions();
-    const conn = await createConnection({
-      ...connectionOptions,
-      entities: [UserEntity],
-    });
+    const conn = await getConnection();
     await BaseEntity.useConnection(conn);
     const app = express();
 

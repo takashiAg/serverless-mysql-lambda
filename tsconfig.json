@@ -1,19 +1,26 @@
 {
   "extends": "./tsconfig.paths.json",
   "compilerOptions": {
-    "lib": ["ESNext"],
+    "lib": ["es5", "es6"],
+    "target": "ES2020",
+    "module": "commonjs",
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     "removeComments": true,
-    "sourceMap": true,
-    "target": "ES2020",
     "outDir": "lib",
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "sourceMap": true,
+    "esModuleInterop": true
   },
-  "include": ["src/**/*.ts", "serverless.ts"],
+  "include": [
+    "src/**/*.ts",
+    "serverless.ts",
+    "src/migration/1644894761628-Migration.ts",
+    "src/config/ormconfig.js"
+  ],
   "exclude": [
     "node_modules/**/*",
     ".serverless/**/*",

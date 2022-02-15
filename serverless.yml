@@ -24,7 +24,7 @@ provider:
 
 custom:
   webpack:
-    webpackConfig: ./webpack.config.js
+    webpackConfig: ./webpack.config.cjs
     includeModules:
       packagePath: package.json
       forceInclude:
@@ -129,6 +129,12 @@ functions:
       DB_CLST_ARN: ${self:custom.db_cluster_arn}
       SECRET_ARN: !Ref SecretAurora
       TEST: !Ref AWS::AccountId
+  up:
+    handler: src/handlers/index.up
+    timeout: 30
+  down:
+    handler: src/handlers/index.down
+    timeout: 30
 
 plugins:
   - serverless-offline

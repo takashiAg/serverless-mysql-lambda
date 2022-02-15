@@ -1,6 +1,7 @@
 const nodeExternals = require("webpack-node-externals");
 const serverlessWebpack = require("serverless-webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const { TsconfigPathsPlugin } = require("tsconfig-paths-webpack-plugin");
 
 module.exports = {
   devtool: "inline-cheap-module-source-map",
@@ -22,6 +23,7 @@ module.exports = {
   },
   resolve: {
     extensions: [".ts", ".js"],
+    plugins: [new TsconfigPathsPlugin({ configFile: "./tsconfig.json" })],
   },
   target: "node",
   plugins: [new CopyWebpackPlugin({ patterns: ["ormconfig.js"] })],

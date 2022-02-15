@@ -3,10 +3,23 @@ const DB_CLST_ARN = process.env.DB_CLST_ARN;
 const SECRET_ARN = process.env.SECRET_ARN;
 const SCHEMA = "test-db";
 
-const LOCAL = !!process.env.LOCAL ?? false;
 const MYSQL_USERNAME = process.env.MYSQL_USERNAME;
 const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD;
 const MYSQL_DATABASE = process.env.MYSQL_DATABASE;
+
+const LOCAL = !!process.env.LOCAL ?? false;
+const WITH_DIR_CONFIG = !!process.env.WITH_DIR_CONFIG ?? false;
+
+const dirConfig = {
+  entities: ["src/entity/**/*.ts"],
+  migrations: ["src/migration/**/*.ts"],
+  subscribers: ["src/subscriber/**/*.ts"],
+  cli: {
+    entitiesDir: "src/entity",
+    migrationsDir: "src/migration",
+    subscribersDir: "src/subscriber",
+  },
+};
 
 const local = {
   type: "mysql",
@@ -28,19 +41,10 @@ const aws = {
   database: SCHEMA,
 };
 
-const conifg = [
-  {
-    ...(LOCAL ? local : aws),
-    name: "default",
-    entities: ["src/entity/**/*.ts"],
-    migrations: ["src/migration/**/*.ts"],
-    subscribers: ["src/subscriber/**/*.ts"],
-    cli: {
-      entitiesDir: "src/entity",
-      migrationsDir: "src/migration",
-      subscribersDir: "src/subscriber",
-    },
-  },
-];
+const conifg = {
+  ...(LOCAL ? local : aws),
+  ...(WITH_DIR_CONFIG ? dirConfig : {}),
+  name: "default",
+};
 
 module.exports = conifg;
