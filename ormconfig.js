@@ -10,8 +10,6 @@ const MYSQL_DATABASE = process.env.MYSQL_DATABASE;
 const LOCAL = !!process.env.LOCAL ?? false;
 const WITH_DIR_CONFIG = !!process.env.WITH_DIR_CONFIG ?? false;
 
-console.log(process.env);
-
 const dirConfig = {
   entities: ["src/entity/**/*.ts"],
   migrations: ["src/migration/**/*.ts"],
