@@ -6,7 +6,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "serverless offline",
     "migrate:generate": "WITH_DIR_CONFIG=true ts-node node_modules/.bin/typeorm migration:generate -n Migration",
-    "migrate:run": "serverless invoke local --function up",
+    "migrate:local:run": "serverless invoke local --function up",
+    "migrate:run": "serverless invoke --function up",
     "deploy": "serverless deploy"
   },
   "author": "",
